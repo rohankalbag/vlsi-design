@@ -1,0 +1,62 @@
+CMOS Inverter Rise and Fall Time
+
+.include models-180nm
+
+*Name: Rohan Rajesh Kalbag 
+*Roll 20D170033 :  nn = 33
+
+* required outrise = 200 + 66 = 266 ps = 2.66e-10 s
+* required outfall = 200 + 66 = 266 ps = 2.66e-10 s
+
+* measured outrise = 2.66286e-10 s
+* measured outfall = 2.66096e-10 s
+
+*geometry parameters
+.param pw = 1.505U
+.param pl = 0.18U
+.param pad = {2*pw*pl}
+.param pas = {2*pw*pl}
+.param ppd = {2*(pw + 2*pl)}
+.param pps = {2*(pw + 2*pl)}
+
+.param nw = 0.502U
+.param nl = 0.18U
+.param nad = {2*nw*nl}
+.param nas = {2*nw*nl}
+.param npd = {2*(nw + 2*nl)}
+.param nps = {2*(nw + 2*nl)}
+
+* unit inverter
+.subckt inv supply Inp Output
+MP1 Output Inp Supply Supply cmosp
++ L={pl} W={pw} AD={pad} AS={pas} PD={ppd} PS={pps}
+MN1 Output Inp 0 0 cmosn
++ L={nl} W={nw} AD={nad} AS={nas} PD={npd} PS={nps}
+.ends
+
+vdd supply 0 dc 1.8
+* device under test
+x3 supply Ck dutout inv
+* load capacitor
+C3 dutout 0 0.05pF
+*transient analysis with pulse inputs
+VCk Ck 0 DC 0 PULSE(0 1.8 0nS 20pS 20pS 4nS 8nS)
+
+.tran 1pS 35nS 0nS
+.control
+run
+plot 4.0+V(Ck) V(dutout)
+
+* 20ps input rise and fall time
+meas tran risetime TRIG v(ck) VAL=0.001 RISE=2 TARG v(Ck) VAL=1.799 RISE=2
+meas tran falltime TRIG v(ck) VAL=1.799 FALL=2 TARG v(Ck) VAL=0.001 FALL=2
+
+* input 10% - 80% rise and fall time
+meas tran inprise TRIG v(ck) VAL=0.18 RISE=2 TARG v(Ck) VAL=1.62 RISE=2
+meas tran inpfall TRIG v(ck) VAL=1.62 FALL=2 TARG v(Ck) VAL=0.18 FALL=2
+
+* output 10% - 80% rise and fall time
+meas tran outrise TRIG v(dutout) VAL=0.18 RISE=2 TARG v(dutout) VAL=1.62 RISE=2
+meas tran outfall TRIG v(dutout) VAL=1.62 FALL=2 TARG v(dutout) VAL=0.18 FALL=2
+.endc
+.end
