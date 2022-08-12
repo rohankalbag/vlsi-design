@@ -1,0 +1,89 @@
+CMOS Inverter Rise and Fall Time
+
+.include models-180nm
+
+*Name: Rohan Rajesh Kalbag 
+*Roll 20D170033 :  nn = 33
+
+*geometry parameters
+.param pw = 1.505U
+.param pl = 0.18U
+.param pad = {2*pw*pl}
+.param pas = {2*pw*pl}
+.param ppd = {2*(pw + 2*pl)}
+.param pps = {2*(pw + 2*pl)}
+
+.param nw = 0.502U
+.param nl = 0.18U
+.param nad = {2*nw*nl}
+.param nas = {2*nw*nl}
+.param npd = {2*(nw + 2*nl)}
+.param nps = {2*(nw + 2*nl)}
+
+* logic unit to implement (A.(B+C))'
+* the circuit diagram of the design can be found in q3_cmos_logic_design.jpg
+.subckt logic supply A B C Y
+MP1 Y A supply supply cmosp
++ L={pl} W={pw} AD={pad} AS={pas} PD={ppd} PS={pps}
+MP2 mid1 B supply supply cmosp
++ L={pl} W={pw} AD={pad} AS={pas} PD={ppd} PS={pps}
+MP3 Y C mid1 mid1 cmosp
++ L={pl} W={pw} AD={pad} AS={pas} PD={ppd} PS={pps}
+
+MN1 Y A mid2 mid2 cmosn
++ L={nl} W={nw} AD={nad} AS={nas} PD={npd} PS={nps}
+MN2 mid2 B 0 0 cmosn
++ L={nl} W={nw} AD={nad} AS={nas} PD={npd} PS={nps}
+MN3 mid2 C 0 0 cmosn
++ L={nl} W={nw} AD={nad} AS={nas} PD={npd} PS={nps}
+.ends
+
+vdd supply 0 dc 1.8
+* device under test
+x3 supply av bv cv dutout logic
+* load capacitor
+C3 dutout 0 0.05pF
+
+*Desired Transitions 
+
+* a) B = 1, C = 1 if A = 0 then Y = 1 else Y = 0
+
+* measured rise time = 276ps
+* measured fall time = 341ps
+
+*for a) uncomment next three lines and comment them while simulating others
+VA av 0 DC 0 PULSE(0 1.8 0nS 20pS 20pS 4nS 8nS)
+VB bv 0 DC 1.8
+VC cv 0 DC 1.8
+
+* b) A = 1, B = 0 if C = 0 then Y = 1 else Y = 0
+
+* measured rise time = 518ps
+* measured fall time = 426ps
+
+*for b) uncomment next three lines and comment them while simulating others
+* VC cv 0 DC 0 PULSE(0 1.8 0nS 20pS 20pS 4nS 8nS)
+* VA av 0 DC 1.8
+* VB bv 0 DC 0
+
+* c) A = 1, C = 0 if B = 0 then Y = 1 else Y = 0
+
+* measured rise time = 518ps
+* measured fall time = 443ps
+
+*for c) uncomment next three lines and comment them while simulating others
+* VB bv 0 DC 0 PULSE(0 1.8 0nS 20pS 20pS 4nS 8nS)
+* VA av 0 DC 1.8
+* VC cv 0 DC 0
+
+*transient analysis
+.tran 1pS 35nS 0nS
+.control
+run
+plot 4.0+V(av) 8.0+V(bv) 12.0+V(cv) V(dutout)
+
+* output 10% - 80% rise and fall time
+meas tran outrise TRIG v(dutout) VAL=0.18 RISE=2 TARG v(dutout) VAL=1.62 RISE=2
+meas tran outfall TRIG v(dutout) VAL=1.62 FALL=2 TARG v(dutout) VAL=0.18 FALL=2
+.endc
+.end
