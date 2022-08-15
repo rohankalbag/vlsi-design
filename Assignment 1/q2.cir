@@ -39,7 +39,22 @@ VCk Ck 0 DC
 .dc VCk 0 1.8 0.001
 .control
 run
-plot V(dutout) vs V(Ck)
 
+*plotting of graphs
+plot V(dutout) vs V(Ck)
+plot deriv(V(dutout)) vs V(Ck)
+
+*calculation of noise margin
+let der = deriv(V(dutout))
+meas dc VIL find V(Ck) when der = -1
+meas dc VIH find V(Ck) when der = -1 rise = last
+meas dc VOH find V(dutout) when V(ck) = VIL
+meas dc VOL find V(dutout) when V(ck) = VIH
+
+let highnoisemargin = VOH - VIH
+let lownoisemargin = VIL - VOL
+
+print highnoisemargin
+print lownoisemargin
 .endc
 .end
