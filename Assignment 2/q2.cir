@@ -1,0 +1,53 @@
+.include models-180nm
+
+*Name: Rohan Rajesh Kalbag 
+*Roll 20D170033 :  nn = 33
+
+.subckt cvsllogic supply A B Adash Bdash Out1 Out2
+MP1 Out1 Out2 supply supply cmosp
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+MN1 Out1 Adash n1 n1 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+MN2 n1 Bdash 0 0 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+MN3 Out1 A n2 n2 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+MN4 n2 B 0 0 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+
+MP2 Out2 Out1 supply supply cmosp
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+MN5 Out2 Adash n3 n3 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+MN6 n3 B 0 0 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+MN7 Out2 A n4 n4 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+MN8 n4 Bdash 0 0 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+.ends
+
+.param Trep1= 40n
+.param Trep2 = {Trep1/2.0}
+.param Trf = {Trep1/20.0}
+.param Tw1 = {Trep1/2.0 - Trf}
+.param Tw2 = {Trep2/2.0 - Trf}
+.param hival=1.6
+.param loval=0.2
+
+V1 A 0 DC 0 PULSE({loval} {hival} {Tw1} {Trf} {Trf} {Tw1} {Trep1})
+V2 Abar 0 DC 0 PULSE({hival} {loval} {Tw1} {Trf} {Trf} {Tw1} {Trep1})
+V3 B 0 DC 0 PULSE({loval} {hival} {Tw2} {Trf} {Trf} {Tw2} {Trep2})
+V4 Bbar 0 DC 0 PULSE({hival} {loval} {Tw2} {Trf} {Trf} {Tw2} {Trep2})
+V5 vdd 0 DC 1.8
+
+x1 vdd A B Abar Bbar xor xnor cvsllogic
+.tran 1pS {3*Trep1} 0nS
+.control
+
+run
+plot V(A)+2 V(B)+4 V(xnor) V(xor)
+
+.endc
+.end
+

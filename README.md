@@ -1,2 +1,2 @@
 # VLSI-Design
-EE677 @ IIT Bombay
+EE671 @ IIT Bombay
