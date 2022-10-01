@@ -1,0 +1,67 @@
+.include models-180nm
+
+*Name: Rohan Rajesh Kalbag 
+*Roll 20D170033 :  nn = 33
+
+.param pw = 1.505U
+.param pl = 0.18U
+.param pad = {2*pw*pl}
+.param pas = {2*pw*pl}
+.param ppd = {2*(pw + 2*pl)}
+.param pps = {2*(pw + 2*pl)}
+
+.param nw = 0.502U
+.param nl = 0.18U
+.param nad = {2*nw*nl}
+.param nas = {2*nw*nl}
+.param npd = {2*(nw + 2*nl)}
+.param nps = {2*(nw + 2*nl)}
+
+.subckt cvsllogic supply A B Adash Bdash Out1 Out2
+MP1 Out1 Out2 supply supply cmosp
++ L={pl} W={pw} AD={pad} AS={pas} PD={ppd} PS={pps}
+MN1 Out1 Adash n1 n1 cmosn
++ L={nl} W={2*nw} AD={nad} AS={nas} PD={npd} PS={nps}
+MN2 n1 Bdash 0 0 cmosn
++ L={nl} W={2*nw} AD={nad} AS={nas} PD={npd} PS={nps}
+MN3 Out1 A n2 n2 cmosn
++ L={nl} W={2*nw} AD={nad} AS={nas} PD={npd} PS={nps}
+MN4 n2 B 0 0 cmosn
++ L={nl} W={2*nw} AD={nad} AS={nas} PD={npd} PS={nps}
+
+MP2 Out2 Out1 supply supply cmosp
++ L={pl} W={pw} AD={pad} AS={pas} PD={ppd} PS={pps}
+MN5 Out2 Adash n3 n3 cmosn
++ L={nl} W={2*nw} AD={nad} AS={nas} PD={npd} PS={nps}
+MN6 n3 B 0 0 cmosn
++ L={nl} W={2*nw} AD={nad} AS={nas} PD={npd} PS={nps}
+MN7 Out2 A n4 n4 cmosn
++ L={nl} W={2*nw} AD={nad} AS={nas} PD={npd} PS={nps}
+MN8 n4 Bdash 0 0 cmosn
++ L={nl} W={2*nw} AD={nad} AS={nas} PD={npd} PS={nps}
+.ends
+
+.param Trep1= 40n
+.param Trep2 = {Trep1/2.0}
+.param Trf = {Trep1/20.0}
+.param Tw1 = {Trep1/2.0 - Trf}
+.param Tw2 = {Trep2/2.0 - Trf}
+.param hival=1.6
+.param loval=0.2
+
+V1 A 0 DC 0 PULSE({loval} {hival} {Tw1} {Trf} {Trf} {Tw1} {Trep1})
+V2 Abar 0 DC 0 PULSE({hival} {loval} {Tw1} {Trf} {Trf} {Tw1} {Trep1})
+V3 B 0 DC 0 PULSE({loval} {hival} {Tw2} {Trf} {Trf} {Tw2} {Trep2})
+V4 Bbar 0 DC 0 PULSE({hival} {loval} {Tw2} {Trf} {Trf} {Tw2} {Trep2})
+V5 vdd 0 DC 1.8
+
+x1 vdd A B Abar Bbar xor xnor cvsllogic
+.tran 1pS {3*Trep1} 0nS
+.control
+
+run
+plot V(A)+2 V(B)+4 V(xnor) V(xor)
+
+.endc
+.end
+

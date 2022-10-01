@@ -1,0 +1,89 @@
+.include models-180nm
+
+*Name: Rohan Rajesh Kalbag 
+*Roll 20D170033 :  nn = 33
+
+* Switch Matrix
+.subckt swmat In1 In2 In3 In4 con conbar Out1 Out2
+MN1 In1 con Out1 0 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+MN2 In2 conbar Out1 0 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+MN3 In3 con Out2 0 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+MN4 In4 conbar Out2 0 cmosn
++ L=0.18U W=0.24U AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+* Loads representing wiring capacitance
+C1 Out1 0 133fF
+C2 Out2 0 133fF
+.ends
+
+* Unit Inverter
+
+* Geometry Parameters for Inverter which was designed by me in Assignment 1
+.param pw = 1.505U
+.param pl = 0.18U
+.param pad = {2*pw*pl}
+.param pas = {2*pw*pl}
+.param ppd = {2*(pw + 2*pl)}
+.param pps = {2*(pw + 2*pl)}
+
+.param nw = 0.502U
+.param nl = 0.18U
+.param nad = {2*nw*nl}
+.param nas = {2*nw*nl}
+.param npd = {2*(nw + 2*nl)}
+.param nps = {2*(nw + 2*nl)}
+
+
+.subckt inv supply Inp Output
+MP1 Output Inp Supply Supply cmosp
++ L={pl} W={pw} AD={pad} AS={pas} PD={ppd} PS={pps}
+MN1 Output Inp 0 0 cmosn
++ L={nl} W={nw} AD={nad} AS={nas} PD={npd} PS={nps}
+.ends
+
+
+.param Trep1= 40n
+.param Trep2 = {Trep1/2.0}
+.param Trf = {Trep1/20.0}
+.param Tw1 = {Trep1/2.0 - Trf}
+.param Tw2 = {Trep2/2.0 - Trf}
+.param hival=1.6
+.param loval=0.2
+
+V1 A 0 DC 0 PULSE({loval} {hival} {Tw1} {Trf} {Trf} {Tw1} {Trep1})
+V2 Abar 0 DC 0 PULSE({hival} {loval} {Tw1} {Trf} {Trf} {Tw1} {Trep1})
+V3 B 0 DC 0 PULSE({loval} {hival} {Tw2} {Trf} {Trf} {Tw2} {Trep2})
+V4 Bbar 0 DC 0 PULSE({hival} {loval} {Tw2} {Trf} {Trf} {Tw2} {Trep2})
+V5 vdd 0 DC 1.8
+
+vinv1 vdd top1 dc 0
+vinv2 vdd top2 dc 0 
+
+x1 B Bbar Bbar B A Abar out1 out2 swmat
+x2 top1 out1 xor inv
+x3 top2 out2 xnor inv
+
+*PMOS for leakage current reduction
+
+m1 out1 xor vdd vdd cmosp
++ L=0.18U W={0.24U*4} AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+
+m2 out2 xnor vdd vdd cmosp
++ L=0.18U W={0.24U*4} AD = 86.4f AS = 86.4f PD = 1.2U PS = 1.2U
+
+.tran 1pS {3*Trep1} 0nS
+.control
+
+run
+plot V(A)+2 V(B)+4 V(xnor)-2 V(xor) V(out1)-4 V(out2)-6
+plot I(vinv1) 
+plot I(vinv2)
+
+
+meas tran averagecurr1 AVG I(vinv1) from=0 to={3*Trep1}
+meas tran averagecurr2 AVG I(vinv2) from=0 to={3*Trep1}
+.endc
+.end
+
