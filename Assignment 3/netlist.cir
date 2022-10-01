@@ -1,4 +1,4 @@
-CMOS Inverter Rise and Fall Time
+Assignment 3
 
 .include models-180nm
 
@@ -69,9 +69,14 @@ c2 n5 0 0.1p
 
 .tran 0.1pS {3*Trep} 0nS
 .control
-run
-plot v(dutin) v(dutout)
-meas tran invdelay1 TRIG v(dutin) VAL=0.9 RISE=2 TARG v(dutout) VAL=1.65 FALL=2
 
+run
+meas tran delay_rising_edge TRIG v(dutin) VAL=0.9 RISE=2 TARG v(dutout) VAL=0.9 FALL=2
+meas tran delay_falling_edge TRIG v(dutin) VAL=0.9 FALL=2 TARG v(dutout) VAL=0.9 RISE=2
+let delay = {(delay_rising_edge + delay_falling_edge)/2}
+print delay
+
+let gamma = {1.505u/0.502u}
+print gamma
 .endc
 .end
