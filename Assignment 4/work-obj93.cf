@@ -1,16 +1,16 @@
 v 3
-file . "brent_kung_adder.vhdl" "20221011205406.000" "20221012022949.759":
-  entity brentkung at 4( 76) + 0 on 155;
-  architecture behave of brentkung at 16( 330) + 0 on 156;
-file . "gates.vhdl" "20221011204422.000" "20221012022949.607":
-  entity andgate at 4( 76) + 0 on 147;
-  architecture trivial of andgate at 12( 225) + 0 on 148;
-  entity xorgate at 17( 335) + 0 on 149;
-  architecture trivial of xorgate at 25( 484) + 0 on 150;
-  entity abcgate at 30( 594) + 0 on 151;
-  architecture trivial of abcgate at 38( 745) + 0 on 152;
-  entity cin_map_g at 43( 861) + 0 on 153;
-  architecture trivial of cin_map_g at 51( 1020) + 0 on 154;
-file . "testbench.vhdl" "20221011205944.000" "20221012022949.850":
-  entity tb at 2( 25) + 0 on 157;
-  architecture behave of tb at 8( 101) + 0 on 158;
+file . "testbench.vhdl" "20221012110042.000" "20221012163544.277":
+  entity tb at 1( 0) + 0 on 261;
+  architecture behave of tb at 10( 113) + 0 on 262;
+file . "gates.vhdl" "20221011204422.000" "20221012163544.048":
+  entity andgate at 4( 76) + 0 on 251;
+  architecture trivial of andgate at 12( 225) + 0 on 252;
+  entity xorgate at 17( 335) + 0 on 253;
+  architecture trivial of xorgate at 25( 484) + 0 on 254;
+  entity abcgate at 30( 594) + 0 on 255;
+  architecture trivial of abcgate at 38( 745) + 0 on 256;
+  entity cin_map_g at 43( 861) + 0 on 257;
+  architecture trivial of cin_map_g at 51( 1020) + 0 on 258;
+file . "brent_kung_adder.vhdl" "20221012105630.000" "20221012163544.200":
+  entity brentkung at 4( 76) + 0 on 259;
+  architecture behave of brentkung at 16( 330) + 0 on 260;
