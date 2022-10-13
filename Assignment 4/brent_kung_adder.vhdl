@@ -15,7 +15,7 @@ end entity;
 
 architecture behave of brentkung is
     --signal declarations --
-        
+    
         --leaf nodes
         signal p1_i, g1_i: std_logic_vector(15 downto 0);
         -- root node
@@ -68,10 +68,16 @@ begin
     end generate xors;
 
     --generate g1_i signals --
-    ands: for i in 0 to 15 generate
+    ands: for i in 1 to 15 generate
         and_i: andgate port map(a => a(i), b => b(i), prod => g1_i(i));
     end generate ands;
 
+    --generate g1_0 using Cin_map_G
+    cmapg_1: Cin_map_G port map(a => a(0), b => b(0), cin => cin, bit0_g => g1_i(0));
+
+    --set the first carry as the value g1_0
+    c(1) <= g1_i(0);
+    
     --generate p2, g2 signals --
     abc_1: abcgate port map(a => g1_i(1), b => p1_i(1), c => g1_i(0), abc => g2_1_0);
     abc_2: abcgate port map(a => g1_i(3), b => p1_i(3), c => g1_i(2), abc => g2_3_2);
@@ -115,7 +121,6 @@ begin
     and_15: andgate port map(a => p4_15_8, b => p4_7_0, prod=>p5_15_0);
 
     --generate carry signals --
-    abc_c1: abcgate port map(b => p1_i(0), a=>g1_i(0), c=>cin, abc => c(1));
     abc_c2: abcgate port map(b => p2_1_0, a=>g2_1_0, c=>cin, abc => c(2));
     abc_c3: abcgate port map(b => p1_i(2), a=>g1_i(2), c=>c(2), abc => c(3));
     abc_c4: abcgate port map(b => p3_3_0, a=>g3_3_0, c=>cin, abc => c(4));
@@ -137,7 +142,7 @@ begin
         sum_xor_i: xorgate port map(a => p1_i(i), b => c(i), uneq => s(i));
     end generate sumxors;
 
-    --carry out--
+    --carry out and carry in--
     c(0) <= cin;
     cout <= c(16);
 end behave;
