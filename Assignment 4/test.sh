@@ -1,7 +1,8 @@
 echo "generating random testcases"
 python testcase_generator.py
+echo "testcases primed"
 
-echo "starting compilation"
+echo "starting testing"
 ghdl -a gates.vhdl
 ghdl -e andgate
 ghdl -e xorgate
@@ -13,4 +14,4 @@ ghdl -e brentkung
 ghdl -a testbench.vhdl
 ghdl -e tb
 ghdl -r tb --wave=wave.ghw
-echo "compilation successful"
+echo "testing completed"
