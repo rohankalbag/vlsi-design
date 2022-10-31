@@ -26,6 +26,7 @@ architecture behave of tb is
     -- signal declaration --
     signal input_vector: std_logic_vector(31 downto 0);
     signal output_vector: std_logic_vector(16 downto 0);
+    signal correct_output_vector: std_logic_vector(16 downto 0);
 
     -- function to convert bit_string to string --
     function to_string(x: string) return string is
@@ -99,7 +100,7 @@ architecture behave of tb is
             -- apply inputs to the DUT --
             input_vector <= to_std_logic_vector(in_var);
             wait for 10 ns;
-
+            correct_output_vector <= to_std_logic_vector(out_var);
             -- check if the outputs are correct --
             if(output_vector = to_std_logic_vector(out_var)) then
                 flag := flag and true;
