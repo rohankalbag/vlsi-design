@@ -17,7 +17,7 @@ end entity;
 architecture behave of multiply_accumulate is
     -- component declarations --
     component andgate is
-        port (A, B: in std_logic;
+        port (a, b: in std_logic;
         prod: out std_logic);
     end component;
 
@@ -48,17 +48,17 @@ architecture behave of multiply_accumulate is
 
     --layer 1 signal declarations--
     signal layer1_r1: std_logic_vector(15 downto 0);
-    signal layer1_r2: std_logic_vector(15 downto 0);
-    signal layer1_r3: std_logic_vector(15 downto 0);
-    signal layer1_r4: std_logic_vector(15 downto 0);
-    signal layer1_r5: std_logic_vector(15 downto 0);
-    signal layer1_r6: std_logic_vector(15 downto 0);
-    signal layer1_r7: std_logic_vector(15 downto 0);
-    signal layer1_r8: std_logic_vector(15 downto 0);
-    signal layer1_r9: std_logic_vector(15 downto 0);
+    signal layer1_r2: std_logic_vector(7 downto 0);
+    signal layer1_r3: std_logic_vector(8 downto 1);
+    signal layer1_r4: std_logic_vector(9 downto 2);
+    signal layer1_r5: std_logic_vector(10 downto 3);
+    signal layer1_r6: std_logic_vector(11 downto 4);
+    signal layer1_r7: std_logic_vector(12 downto 5);
+    signal layer1_r8: std_logic_vector(13 downto 6);
+    signal layer1_r9: std_logic_vector(14 downto 7);
 
     -- signals for connections--
-    signal wires: std_logic_vector(100 downto 0);
+    signal wires: std_logic_vector(83 downto 0);
     
     -- final sum argument signals--
     signal arg1: std_logic_vector(15 downto 0);
@@ -104,8 +104,8 @@ begin
     arg1(0) <= layer1_r1(0);
     arg2(0) <= layer1_r2(0);
     --column 2--
-    arg2(1) <= layer1_r3(1);
     h1: ha port map(a => layer1_r1(1), b => layer1_r2(1), s => arg1(1), c => arg2(2));
+    arg2(1) <= layer1_r3(1);
     --column 3--
     h2: ha port map(a => layer1_r1(2), b => layer1_r2(2), s => wires(0), c => wires(1));
     f1: fa port map(a => wires(0), b => layer1_r3(2), cin=> layer1_r4(2), s => arg1(2), cout => arg2(3));
@@ -116,7 +116,7 @@ begin
     --column 5--
     f4: fa port map(a => layer1_r1(4), b => layer1_r2(4), cin => layer1_r3(4), s => wires(6), cout => wires(7));
     h4: ha port map(a => layer1_r4(4), b => layer1_r5(4), s => wires(8), c => wires(9));
-    f5: fa port map(a => wires(6), b => wires(8), cin => wires(5), s =>wires(10), cout =>wires(11));
+    f5: fa port map(a => wires(6), b => wires(8), cin => wires(3), s => wires(10), cout =>wires(11));
     f6: fa port map(a => wires(10), b => wires(5), cin => layer1_r6(4), s => arg1(4), cout =>arg2(5));
     --column 6--
     h5: ha port map(a => layer1_r1(5), b => layer1_r2(5), s =>wires(12), c =>wires(13));
@@ -125,7 +125,7 @@ begin
     f9: fa port map(a => wires(14), b => wires(16), cin => wires(7), s => wires(18), cout =>wires(19));
     f10: fa port map(a => wires(18), b => wires(9) , cin => wires(11), s => arg1(5), cout => arg2(6));
     --column 7--
-    f11: fa port map(a => layer1_r1(6), b => layer1_r2(6), cin => layer1_r3(6), s => wires(20), cout => wires(21));
+    f11: fa port map(a => layer1_r1(6), b => layer1_r2(6), cin => layer1_r3(6), s => wires(20), cout => wires(83));
     h6: ha port map(a => layer1_r4(5), b => layer1_r5(5), s =>wires(21), c =>wires(22));
     f12: fa port map(a => wires(20), b => wires(21), cin => wires(13), s => wires(23), cout => wires(24));
     f13: fa port map(a => layer1_r6(6), b => layer1_r7(6), cin => layer1_r8(6), s => wires(25), cout => wires(26));
@@ -135,7 +135,7 @@ begin
     f16: fa port map(a => layer1_r1(7), b => layer1_r2(7), cin => layer1_r3(7), s => wires(29), cout => wires(30));
     f17: fa port map(a => layer1_r4(7), b => layer1_r5(7), cin => layer1_r6(7), s => wires(31), cout => wires(32));
     h7: ha port map(a => layer1_r7(7), b => layer1_r8(7), s => wires(33), c => wires(34));
-    f18: fa port map(a=>wires(29), b=>wires(31), cin=>wires(21), s=>wires(35), cout=>wires(36));
+    f18: fa port map(a=>wires(29), b=>wires(31), cin=>wires(83), s=>wires(35), cout=>wires(36));
     f19: fa port map(a=>wires(33), b=>layer1_r9(7), cin=>wires(22), s=>wires(37), cout=>wires(38));
     f20: fa port map(a=>wires(35), b=>wires(37), cin=>wires(24), s=>wires(39), cout=>wires(40));
     f21: fa port map(a=>wires(39), b=>wires(26), cin=>wires(28), s=>arg1(7), cout=>arg2(8));

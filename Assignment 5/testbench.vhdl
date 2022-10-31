@@ -82,7 +82,7 @@ architecture behave of tb is
         file outfile: text open write_mode is "results.txt";
 
         -- variable declaration --
-        variable in_var: bit_vector (32 downto 0);
+        variable in_var: bit_vector (31 downto 0);
         variable out_var: bit_vector (16 downto 0);
         variable flag : boolean := true;
         variable testcase : integer := 0;
