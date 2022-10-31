@@ -10,7 +10,7 @@ entity multiply_accumulate is
         a, b: in std_logic_vector(7 downto 0);
         c: in std_logic_vector(15 downto 0);
         s: out std_logic_vector(15 downto 0);
-        cout: out std_logic;
+        cout: out std_logic
     );
 end entity;
 
@@ -24,14 +24,14 @@ architecture behave of multiply_accumulate is
     component fa is 
         port(
             a,b,cin: in std_logic;
-            s,cout: out std_logic;
+            s,cout: out std_logic
         );
     end component;
 
     component ha is
         port(
             a,b: in std_logic;
-            s, c: out std_logic;
+            s, c: out std_logic
         );
     end component;
 
@@ -44,26 +44,27 @@ architecture behave of multiply_accumulate is
         );
     end component;
 
-    gnd_sig: std_logic <= '0';
+    signal gnd_sig: std_logic := '0';
 
     --layer 1 signal declarations--
-    layer1_r1: std_logic_vector(15 downto 0);
-    layer1_r2: std_logic_vector(15 downto 0);
-    layer1_r3: std_logic_vector(15 downto 0);
-    layer1_r4: std_logic_vector(15 downto 0);
-    layer1_r5: std_logic_vector(15 downto 0);
-    layer1_r6: std_logic_vector(15 downto 0);
-    layer1_r7: std_logic_vector(15 downto 0);
-    layer1_r8: std_logic_vector(15 downto 0);
-    layer1_r9: std_logic_vector(15 downto 0);
+    signal layer1_r1: std_logic_vector(15 downto 0);
+    signal layer1_r2: std_logic_vector(15 downto 0);
+    signal layer1_r3: std_logic_vector(15 downto 0);
+    signal layer1_r4: std_logic_vector(15 downto 0);
+    signal layer1_r5: std_logic_vector(15 downto 0);
+    signal layer1_r6: std_logic_vector(15 downto 0);
+    signal layer1_r7: std_logic_vector(15 downto 0);
+    signal layer1_r8: std_logic_vector(15 downto 0);
+    signal layer1_r9: std_logic_vector(15 downto 0);
 
     -- signals for connections--
-    wires: std_logic_vector(100 downto 0);
+    signal wires: std_logic_vector(100 downto 0);
     
     -- final sum argument signals--
-    arg1: std_logic_vector(15 downto 0);
-    arg2: std_logic_vector(15 downto 0);
+    signal arg1: std_logic_vector(15 downto 0);
+    signal arg2: std_logic_vector(15 downto 0);
 
+begin
 
     layer1_r1 <= c;
 
@@ -143,7 +144,7 @@ architecture behave of multiply_accumulate is
     f23: fa port map(a=>layer1_r5(8), b=>layer1_r6(8), cin=>layer1_r7(8), s=>wires(43), cout=>wires(44));
     h8: ha port map(a=>layer1_r8(8), b=>layer1_r9(8), s=>wires(45), c=>wires(46));
     f24: fa port map(a=>wires(41), b=>wires(30), cin=>wires(43), s=>wires(47), cout=>wires(48));
-    f25: fa port map(a=>wires(45), b=>layer1_r9(32), cin=>wires(34), s=>wires(49), cout=>wires(50));
+    f25: fa port map(a=>wires(45), b=>wires(32), cin=>wires(34), s=>wires(49), cout=>wires(50));
     f26: fa port map(a=>wires(47), b=>wires(49), cin=>wires(36), s=>wires(51), cout=>wires(52));
     f27: fa port map(a=>wires(38), b=>wires(51), cin=>wires(40), s=>arg1(8), cout=>arg2(9));
     --column 10--

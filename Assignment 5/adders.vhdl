@@ -154,7 +154,7 @@ use IEEE.std_logic_1164.all;
 entity ha is
     port(
         a,b: in std_logic;
-        s, c: out std_logic;
+        s, c: out std_logic
     );
 end entity;
 
@@ -169,7 +169,7 @@ architecture behave of ha is
         port (A, B: in std_logic;
         uneq: out std_logic);
     end component xorgate;
-
+begin
     a1: andgate port map(a => a, b => b, prod => c);
     x1: xorgate port map(a => a, b => b, uneq => s);
 end behave;
@@ -180,7 +180,7 @@ use IEEE.std_logic_1164.all;
 entity fa is 
      port(
         a,b,cin: in std_logic;
-        s,cout: out std_logic;
+        s,cout: out std_logic
     );
 end entity;
 
@@ -202,11 +202,11 @@ architecture behave of fa is
     end component Cin_map_G;
 
     signal t1: std_logic;
-    
+
+begin
     g1: Cin_map_G port map(cin => cin, a => a, b => b, bit0_g => cout);
     x1: xorgate port map(a => a, b => b, uneq => t1);
     x2: xorgate port map(a => t1, b => cin, uneq => s);
-
 end behave;
 
 
