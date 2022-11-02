@@ -1,6 +1,8 @@
 -- Rohan Rajesh Kalbag --
 -- Roll Number: 20D170033, last digit is 3 --
 
+--16 bit brent kung adder of Assignment 4--
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 
@@ -147,7 +149,7 @@ begin
     cout <= c(16);
 end behave;
 
-
+--Half Adder--
 library IEEE;
 use IEEE.std_logic_1164.all;
 
@@ -174,6 +176,7 @@ begin
     x1: xorgate port map(a => a, b => b, uneq => s);
 end behave;
 
+--Full Adder--
 library IEEE;
 use IEEE.std_logic_1164.all;
 

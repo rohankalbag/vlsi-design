@@ -1,11 +1,8 @@
--- Rohan Rajesh Kalbag --
--- Roll Number: 20D170033, last digit is 3 --
-
 library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity multiply_accumulate is 
-    --perform ab + c --
+    -- perform ab + c --
     port(
         a, b: in std_logic_vector(7 downto 0);
         c: in std_logic_vector(15 downto 0);
@@ -44,9 +41,11 @@ architecture behave of multiply_accumulate is
         );
     end component;
 
+    -- LOW signal for carry in of Brent Kung Adder--
     signal gnd_sig: std_logic := '0';
 
-    --layer 1 signal declarations--
+    -- layer 1 signal declarations--
+    -- we make rows corresponding to the first layer--
     signal layer1_r1: std_logic_vector(15 downto 0);
     signal layer1_r2: std_logic_vector(7 downto 0);
     signal layer1_r3: std_logic_vector(8 downto 1);
@@ -61,15 +60,17 @@ architecture behave of multiply_accumulate is
     signal wires: std_logic_vector(83 downto 0);
     
     -- final sum argument signals--
+    -- first argument (top row of final layer)--
     signal arg1: std_logic_vector(15 downto 0);
+    -- second argument (bottom row of final layer)--
     signal arg2: std_logic_vector(15 downto 0);
 
 begin
-
+    -- set first row as 16 bit sum--
     layer1_r1 <= c;
 
-    --8x8 array of AND gates--
-    -- [a1 a2 a3 ... a8] is the 8x8 array of AND gates-- 
+    -- [a1 a2 a3 ... a8] is the 8x8 array of AND gates--
+    -- accordingly set the subsequent signals for other rows-- 
     a1: for i in 0 to 7 generate
         and_i: andgate port map(a => b(i), b => a(0), prod => layer1_r2(i)); 
     end generate a1;
@@ -101,6 +102,8 @@ begin
     a8: for i in 0 to 7 generate
         and_i: andgate port map(a => b(i), b => a(7), prod => layer1_r9(i + 7)); 
     end generate a8;
+
+    -- connections are made column wise as per the diagram--
 
     --column 1--
     arg1(0) <= layer1_r1(0);
@@ -194,7 +197,7 @@ begin
     --column 16--
     arg1(15) <= layer1_r1(15);
     
-    --final adder--
+    --final adder to compute arg1 + arg2--
     bkadder: brentkung port map(a =>arg1, b=>arg2, cin=>gnd_sig, s=>s, cout=>cout);
 
 end behave;

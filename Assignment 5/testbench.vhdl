@@ -1,7 +1,3 @@
--- Rohan Rajesh Kalbag --
--- Roll Number: 20D170033, last digit is 3 --
--- Testbench --
-
 library std;
 use std.textio.all;
 
