@@ -71,6 +71,7 @@ c2 n5 0 0.1p
 .control
 
 run
+plot v(dutin) v(dutout)
 meas tran delay_rising_edge TRIG v(dutin) VAL=0.9 RISE=2 TARG v(dutout) VAL=0.9 FALL=2
 meas tran delay_falling_edge TRIG v(dutin) VAL=0.9 FALL=2 TARG v(dutout) VAL=0.9 RISE=2
 let delay = {(delay_rising_edge + delay_falling_edge)/2}

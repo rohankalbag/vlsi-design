@@ -1,0 +1,23 @@
+v 3
+file . "testbench.vhdl" "20221102163704.000" "20221102221101.672":
+  entity tb at 1( 0) + 0 on 443;
+  architecture behave of tb at 10( 113) + 0 on 444;
+file . "mac.vhdl" "20221102163118.000" "20221102221101.573":
+  entity multiply_accumulate at 1( 0) + 0 on 441;
+  architecture behave of multiply_accumulate at 14( 309) + 0 on 442;
+file . "gates.vhdl" "20221011204422.000" "20221102221101.114":
+  entity andgate at 4( 76) + 0 on 427;
+  architecture trivial of andgate at 12( 225) + 0 on 428;
+  entity xorgate at 17( 335) + 0 on 429;
+  architecture trivial of xorgate at 25( 484) + 0 on 430;
+  entity abcgate at 30( 594) + 0 on 431;
+  architecture trivial of abcgate at 38( 745) + 0 on 432;
+  entity cin_map_g at 43( 861) + 0 on 433;
+  architecture trivial of cin_map_g at 51( 1020) + 0 on 434;
+file . "adders.vhdl" "20221102154210.000" "20221102221101.375":
+  entity brentkung at 6( 123) + 0 on 435;
+  architecture behave of brentkung at 18( 377) + 0 on 436;
+  entity ha at 153( 6469) + 0 on 437;
+  architecture behave of ha at 163( 6621) + 0 on 438;
+  entity fa at 180( 7065) + 0 on 439;
+  architecture behave of fa at 190( 7225) + 0 on 440;

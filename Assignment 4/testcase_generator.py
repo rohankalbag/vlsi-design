@@ -2,7 +2,7 @@ import random
 no_of_testcases = 10
 
 with open("testcases.txt", 'w') as t:
-    for i in range(10):
+    for i in range(no_of_testcases):
         cin = random.randint(0, 1)
         a = random.randint(0, 65536)
         b = random.randint(0, 65536)
