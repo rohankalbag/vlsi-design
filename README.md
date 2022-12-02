@@ -1,2 +1,1 @@
-# VLSI-Design
-EE671 @ IIT Bombay
+##  Course Projects - EE 671 - VLSI Design - Autumn Semester 2022
